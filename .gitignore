@@ -1,0 +1,9 @@
+node_modules
+dist/
+data/generated/
+.env
+.env.*
+.vercel/
+__pycache__/
+*.pyc
+.DS_Store

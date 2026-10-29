@@ -1,0 +1,92 @@
+[
+  {
+    "id": "SC01",
+    "label": "Mardi 06 h 30 — prise de poste du matin",
+    "as_of_utc": "2026-11-03T05:30:00Z",
+    "weather": "sec",
+    "is_test_case": false,
+    "description": "Situation nominale avant la pointe du matin (dernière tournée d'échange la veille à 14 h).",
+    "expected_behavior": "Tournées admissibles.",
+    "file": "SC01.json"
+  },
+  {
+    "id": "SC02",
+    "label": "Mardi 16 h 30 — avant la pointe du soir",
+    "as_of_utc": "2026-11-03T15:30:00Z",
+    "weather": "sec",
+    "is_test_case": false,
+    "description": "Situation nominale ; scénario de démonstration par défaut.",
+    "expected_behavior": "Tournées admissibles ; la capacité en batteries est contraignante.",
+    "file": "SC02.json"
+  },
+  {
+    "id": "SC03",
+    "label": "Jeudi 12 h 00 — journée de pluie",
+    "as_of_utc": "2026-11-05T11:00:00Z",
+    "weather": "pluie",
+    "is_test_case": false,
+    "description": "Demande réduite par la pluie (hypothèse H26).",
+    "expected_behavior": "Tournées admissibles.",
+    "file": "SC03.json"
+  },
+  {
+    "id": "TC01",
+    "label": "Test · batteries faibles nombreuses",
+    "as_of_utc": "2026-11-03T15:30:00Z",
+    "weather": "sec",
+    "is_test_case": true,
+    "description": "SC02 avec 40 scooters supplémentaires ramenés sous 20 %.",
+    "expected_behavior": "Capacité contraignante : critiques non servis listés « Capacité batteries atteinte ».",
+    "file": "TC01.json"
+  },
+  {
+    "id": "TC02",
+    "label": "Test · données périmées",
+    "as_of_utc": "2026-11-03T15:30:00Z",
+    "weather": "sec",
+    "is_test_case": true,
+    "description": "SC02 : 15 mesures batterie âgées de 45 min, 5 positions âgées de 20 min.",
+    "expected_behavior": "EXCL_BMS_PERIME ×15 et EXCL_GPS_PERIME ×5.",
+    "file": "TC02.json"
+  },
+  {
+    "id": "TC03",
+    "label": "Test · scooters loués ou réservés",
+    "as_of_utc": "2026-11-03T15:30:00Z",
+    "weather": "sec",
+    "is_test_case": true,
+    "description": "SC02 : 6 scooters < 20 % passés en location, 4 réservés.",
+    "expected_behavior": "Aucun scooter loué ou réservé dans une tournée (EXCL_EN_LOCATION ×6, EXCL_RESERVE ×4 de plus que SC02).",
+    "file": "TC03.json"
+  },
+  {
+    "id": "TC08",
+    "label": "Test · erreurs de données",
+    "as_of_utc": "2026-11-03T15:30:00Z",
+    "weather": "sec",
+    "is_test_case": true,
+    "description": "SC02 : charge 145 %, charge −5 %, message dupliqué, position (0,0), batterie non conforme au registre, statut inconnu.",
+    "expected_behavior": "REJ_BATTERIE_INVALIDE ×2, REJ_DOUBLON ×1, REJ_COORDONNEES ×1, REJ_ASSOCIATION_BATTERIE ×1, REJ_STATUT_INCONNU ×1.",
+    "file": "TC08.json"
+  },
+  {
+    "id": "TC09",
+    "label": "Test · alertes batterie",
+    "as_of_utc": "2026-11-03T15:30:00Z",
+    "weather": "sec",
+    "is_test_case": true,
+    "description": "SC02 : 2 codes défaut BMS et 1 température batterie de 65 °C.",
+    "expected_behavior": "MAINT_ALERTE_BMS ×2 et MAINT_TEMPERATURE ×1 ; jamais dans une tournée.",
+    "file": "TC09.json"
+  },
+  {
+    "id": "TC10",
+    "label": "Test · scooters hors zone",
+    "as_of_utc": "2026-11-03T15:30:00Z",
+    "weather": "sec",
+    "is_test_case": true,
+    "description": "SC02 : 4 scooters déplacés hors de toute zone autorisée.",
+    "expected_behavior": "EXCL_HORS_ZONE ×4.",
+    "file": "TC10.json"
+  }
+]

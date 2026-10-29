@@ -1,0 +1,59 @@
+{
+  "model_id": "depletion_risk",
+  "version": "1.0.0",
+  "trained_at_utc": "2026-10-29T14:29:49Z",
+  "data_origin": "SIMULATION",
+  "algorithm": "logistic_regression",
+  "target": "charge passe sous 20 % dans les 3 h (sans échange entre-temps)",
+  "horizon_h": 3,
+  "applicable_charge_range": [
+    20,
+    40
+  ],
+  "features": [
+    "charge_pct",
+    "usage_rate_6h",
+    "zone_demand_next_h",
+    "is_rain"
+  ],
+  "mean": [
+    30.21214798300007,
+    0.9780533686337352,
+    30.404594858217795,
+    0.37664599735246984
+  ],
+  "std": [
+    5.751206228628152,
+    1.0804111021244585,
+    13.63105121910178,
+    0.4845449308689888
+  ],
+  "coef": [
+    -0.9104618741045709,
+    0.14103707043541114,
+    0.3141810841798579,
+    -0.08303813567460881
+  ],
+  "intercept": -1.7629293039784861,
+  "metrics": {
+    "train_period": "jours ouvrés 1 à 15",
+    "test_period": "jours ouvrés 16 à 20",
+    "n_train": 14353,
+    "n_test": 4860,
+    "positive_rate_test": 0.14958847736625513,
+    "censored_rows_removed": 728,
+    "roc_auc": 0.7669605626668433,
+    "baseline_roc_auc": 0.7430760767080541,
+    "brier": 0.11205228684288895,
+    "brier_prior_only": 0.12855457436077444,
+    "precision_at_10": 0.3129411764705883,
+    "baseline_precision_at_10": 0.30470588235294116
+  },
+  "activation_thresholds_real_data": {
+    "roc_auc_min": 0.75,
+    "precision_at_10_gain_min_points": 10,
+    "source": "H22 (DECISIONS.md)"
+  },
+  "status": "validated_on_simulation",
+  "warning": "Métriques mesurées sur données simulées : elles valident la chaîne de calcul, pas une performance réelle chez BlueMove."
+}

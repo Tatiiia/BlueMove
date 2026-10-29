@@ -1,0 +1,30 @@
+{
+  "name": "bluemove-recharge-planner",
+  "version": "1.0.0",
+  "private": true,
+  "description": "BlueMove — planificateur de tournées de recharge (Workshop 9, consigne E). Données simulées.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "node build.mjs --serve",
+    "build": "node build.mjs",
+    "test": "tsx --test tests/*.test.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "typecheck:engine": "tsc -p tsconfig.engine.json --noEmit",
+    "data": "python3 sim/generate.py && python3 ml/train_depletion.py",
+    "benchmark": "tsx scripts/benchmark.ts"
+  },
+  "dependencies": {
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "esbuild": "0.28.2",
+    "tsx": "4.23.12",
+    "typescript": "6.0.3"
+  }
+}

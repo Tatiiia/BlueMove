@@ -1,0 +1,146 @@
+[
+ {
+  "zone_id": "Z-GARE",
+  "as_of_utc": "2026-11-03T15:30:00Z",
+  "horizon_h": 3,
+  "expected": 19.333333333333332
+ },
+ {
+  "zone_id": "Z-GARE",
+  "as_of_utc": "2026-11-03T05:30:00Z",
+  "horizon_h": 3,
+  "expected": 18.666666666666668
+ },
+ {
+  "zone_id": "Z-GARE",
+  "as_of_utc": "2026-11-05T11:00:00Z",
+  "horizon_h": 3,
+  "expected": 13.666666666666666
+ },
+ {
+  "zone_id": "Z-GARE",
+  "as_of_utc": "2026-11-03T21:15:00Z",
+  "horizon_h": 3,
+  "expected": 2.25
+ },
+ {
+  "zone_id": "Z-AFF",
+  "as_of_utc": "2026-11-03T15:30:00Z",
+  "horizon_h": 3,
+  "expected": 17.0
+ },
+ {
+  "zone_id": "Z-AFF",
+  "as_of_utc": "2026-11-03T05:30:00Z",
+  "horizon_h": 3,
+  "expected": 14.166666666666666
+ },
+ {
+  "zone_id": "Z-AFF",
+  "as_of_utc": "2026-11-05T11:00:00Z",
+  "horizon_h": 3,
+  "expected": 13.0
+ },
+ {
+  "zone_id": "Z-AFF",
+  "as_of_utc": "2026-11-03T21:15:00Z",
+  "horizon_h": 3,
+  "expected": 1.25
+ },
+ {
+  "zone_id": "Z-CAMP",
+  "as_of_utc": "2026-11-03T15:30:00Z",
+  "horizon_h": 3,
+  "expected": 10.5
+ },
+ {
+  "zone_id": "Z-CAMP",
+  "as_of_utc": "2026-11-03T05:30:00Z",
+  "horizon_h": 3,
+  "expected": 9.833333333333334
+ },
+ {
+  "zone_id": "Z-CAMP",
+  "as_of_utc": "2026-11-05T11:00:00Z",
+  "horizon_h": 3,
+  "expected": 14.666666666666666
+ },
+ {
+  "zone_id": "Z-CAMP",
+  "as_of_utc": "2026-11-03T21:15:00Z",
+  "horizon_h": 3,
+  "expected": 1.0
+ },
+ {
+  "zone_id": "Z-CENT",
+  "as_of_utc": "2026-11-03T15:30:00Z",
+  "horizon_h": 3,
+  "expected": 19.166666666666668
+ },
+ {
+  "zone_id": "Z-CENT",
+  "as_of_utc": "2026-11-03T05:30:00Z",
+  "horizon_h": 3,
+  "expected": 9.666666666666666
+ },
+ {
+  "zone_id": "Z-CENT",
+  "as_of_utc": "2026-11-05T11:00:00Z",
+  "horizon_h": 3,
+  "expected": 21.0
+ },
+ {
+  "zone_id": "Z-CENT",
+  "as_of_utc": "2026-11-03T21:15:00Z",
+  "horizon_h": 3,
+  "expected": 3.0
+ },
+ {
+  "zone_id": "Z-RES",
+  "as_of_utc": "2026-11-03T15:30:00Z",
+  "horizon_h": 3,
+  "expected": 13.0
+ },
+ {
+  "zone_id": "Z-RES",
+  "as_of_utc": "2026-11-03T05:30:00Z",
+  "horizon_h": 3,
+  "expected": 11.333333333333334
+ },
+ {
+  "zone_id": "Z-RES",
+  "as_of_utc": "2026-11-05T11:00:00Z",
+  "horizon_h": 3,
+  "expected": 8.666666666666666
+ },
+ {
+  "zone_id": "Z-RES",
+  "as_of_utc": "2026-11-03T21:15:00Z",
+  "horizon_h": 3,
+  "expected": 1.5
+ },
+ {
+  "zone_id": "Z-LOIS",
+  "as_of_utc": "2026-11-03T15:30:00Z",
+  "horizon_h": 3,
+  "expected": 12.333333333333334
+ },
+ {
+  "zone_id": "Z-LOIS",
+  "as_of_utc": "2026-11-03T05:30:00Z",
+  "horizon_h": 3,
+  "expected": 4.166666666666667
+ },
+ {
+  "zone_id": "Z-LOIS",
+  "as_of_utc": "2026-11-05T11:00:00Z",
+  "horizon_h": 3,
+  "expected": 11.0
+ },
+ {
+  "zone_id": "Z-LOIS",
+  "as_of_utc": "2026-11-03T21:15:00Z",
+  "horizon_h": 3,
+  "expected": 3.75
+ }
+]
