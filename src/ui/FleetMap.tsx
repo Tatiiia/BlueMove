@@ -63,16 +63,16 @@ export function FleetMap(p: Props) {
         aria-label="Plan schématique des zones, du dépôt et des scooters" onClick={() => p.onSelect(null)}>
         <defs>
           <pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-            <line x1="0" y1="0" x2="0" y2="8" stroke="#e5484d" strokeWidth="2" opacity="0.35" />
+            <line x1="0" y1="0" x2="0" y2="8" className="m-hatch" strokeWidth="2" />
           </pattern>
           {(p.routes ?? []).map((r) => (
             <marker key={r.agent} id={`arrow-${r.agent}`} viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4" orient="auto">
-              <path d="M 0 0 L 10 5 L 0 10 z" fill={r.color} />
+              <path d="M 0 0 L 10 5 L 0 10 z" style={{ fill: r.color }} />
             </marker>
           ))}
         </defs>
-        {gridLines.map((k) => <line key={`gx${k}`} x1={k * S} x2={k * S} y1={box.y} y2={box.y + box.h} stroke="#e6ebf5" strokeWidth="1" />)}
-        {gridRows.map((k) => <line key={`gy${k}`} y1={k * S} y2={k * S} x1={box.x} x2={box.x + box.w} stroke="#e6ebf5" strokeWidth="1" />)}
+        {gridLines.map((k) => <line key={`gx${k}`} className="m-grid" x1={k * S} x2={k * S} y1={box.y} y2={box.y + box.h} strokeWidth="1" />)}
+        {gridRows.map((k) => <line key={`gy${k}`} className="m-grid" y1={k * S} y2={k * S} x1={box.x} x2={box.x + box.w} strokeWidth="1" />)}
 
         {p.zones.map((z) => {
           const q = proj(z.lat, z.lng);
@@ -80,9 +80,8 @@ export function FleetMap(p: Props) {
           const isClosed = closed.has(z.id);
           return (
             <g key={z.id}>
-              <circle cx={q.x} cy={q.y} r={r} fill={isClosed ? 'url(#hatch)' : 'rgba(29,91,255,0.06)'}
-                stroke={isClosed ? '#e5484d' : 'rgba(29,91,255,0.35)'} strokeWidth="1.5" strokeDasharray={isClosed ? '6 4' : undefined} />
-              <text x={q.x} y={q.y - r - 7} textAnchor="middle" fontSize="13" fontWeight="700" fill={isClosed ? '#b42318' : '#13264d'}>
+              <circle className={`m-zone${isClosed ? ' closed' : ''}`} cx={q.x} cy={q.y} r={r} strokeWidth="1.5" strokeDasharray={isClosed ? '6 4' : undefined} />
+              <text className={`m-zlabel${isClosed ? ' closed' : ''}`} x={q.x} y={q.y - r - 7} textAnchor="middle" fontSize="13" fontWeight="700">
                 {z.name}{isClosed ? ' · fermée' : ''}
               </text>
             </g>
@@ -99,9 +98,9 @@ export function FleetMap(p: Props) {
                 const mx = (a.x + b.x) / 2; const my = (a.y + b.y) / 2;
                 return (
                   <g key={i}>
-                    <line x1={a.x} y1={a.y} x2={b.x} y2={b.y} stroke={r.color} strokeWidth="3" strokeOpacity="0.85" strokeLinecap="round"
+                    <line x1={a.x} y1={a.y} x2={b.x} y2={b.y} style={{ stroke: r.color }} strokeWidth="3" strokeOpacity="0.85" strokeLinecap="round"
                       strokeDasharray={i === pts.length - 2 ? '6 5' : undefined} />
-                    <line x1={a.x} y1={a.y} x2={mx} y2={my} stroke={r.color} strokeWidth="3" strokeOpacity="0" markerEnd={`url(#arrow-${r.agent})`} />
+                    <line x1={a.x} y1={a.y} x2={mx} y2={my} style={{ stroke: r.color }} strokeWidth="3" strokeOpacity="0" markerEnd={`url(#arrow-${r.agent})`} />
                   </g>
                 );
               })}
@@ -114,31 +113,24 @@ export function FleetMap(p: Props) {
           const faded = p.fadeUnrouted && routed.size > 0 && !routed.has(pt.id);
           const sel = p.selectedId === pt.id;
           const common = {
+            className: `m-pt ${pt.kind}${sel ? ' sel' : ''}`,
             onMouseMove: (e: React.MouseEvent) => showTip(pt, e),
             onClick: (e: React.MouseEvent) => { e.stopPropagation(); p.onSelect(pt.id); },
-            style: { cursor: 'pointer' },
             opacity: faded ? 0.25 : 1,
           };
           if (pt.kind === 'maint') {
-            return <rect key={pt.id} {...common} x={q.x - 5} y={q.y - 5} width="10" height="10" transform={`rotate(45 ${q.x} ${q.y})`}
-              fill="#7c3aed" stroke={sel ? '#0b1b3a' : '#fff'} strokeWidth={sel ? 2.5 : 1.2} />;
+            return <rect key={pt.id} {...common} x={q.x - 5} y={q.y - 5} width="10" height="10" transform={`rotate(45 ${q.x} ${q.y})`} />;
           }
-          const style = {
-            crit: { r: 5.5, fill: '#e5484d', stroke: '#fff' },
-            prev: { r: 5, fill: '#f0a02f', stroke: '#fff' },
-            ok: { r: 3.2, fill: 'rgba(18,181,166,0.55)', stroke: 'none' },
-            excl: { r: 4, fill: '#fff', stroke: '#a7b1c2' },
-          }[pt.kind];
-          return <circle key={pt.id} {...common} cx={q.x} cy={q.y} r={sel ? style.r + 2.5 : style.r} fill={style.fill}
-            stroke={sel ? '#0b1b3a' : style.stroke} strokeWidth={sel ? 2.5 : pt.kind === 'excl' ? 1.8 : 1} />;
+          const radius = { crit: 5.5, prev: 5, ok: 3.2, excl: 4 }[pt.kind];
+          return <circle key={pt.id} {...common} cx={q.x} cy={q.y} r={sel ? radius + 2.5 : radius} />;
         })}
 
         {(p.routes ?? []).map((r) => r.stops.map((s) => {
           const q = proj(s.lat, s.lng);
           return (
             <g key={`b${r.agent}-${s.seq}`} onClick={(e) => { e.stopPropagation(); p.onSelect(s.id); }} style={{ cursor: 'pointer' }}>
-              <circle cx={q.x} cy={q.y} r={p.selectedId === s.id ? 12 : 9.5} fill={r.color} stroke="#fff" strokeWidth="2" />
-              <text x={q.x} y={q.y + 3.8} textAnchor="middle" fontSize="10.5" fontWeight="700" fill="#fff">{s.seq}</text>
+              <circle className="m-badge" cx={q.x} cy={q.y} r={p.selectedId === s.id ? 12 : 9.5} style={{ fill: r.color }} strokeWidth="2" />
+              <text className="m-badge-t" x={q.x} y={q.y + 3.8} textAnchor="middle" fontSize="10.5" fontWeight="700">{s.seq}</text>
             </g>
           );
         }))}
@@ -148,18 +140,18 @@ export function FleetMap(p: Props) {
           const active = d.id === p.activeDepot;
           return (
             <g key={d.id} opacity={active ? 1 : 0.45}>
-              <rect x={q.x - 9} y={q.y - 9} width="18" height="18" rx="4" fill={active ? '#0b1b3a' : '#5b6b86'} stroke="#fff" strokeWidth="2" />
-              <text x={q.x} y={q.y + 4} textAnchor="middle" fontSize="10" fontWeight="800" fill="#5ee6d6">D</text>
-              <text x={q.x + 14} y={q.y + 4} fontSize="11.5" fontWeight="600" fill="#0b1b3a">{d.name}{active ? '' : ' (inactif)'}</text>
+              <rect className={`m-depot${active ? '' : ' off'}`} x={q.x - 9} y={q.y - 9} width="18" height="18" rx="4" strokeWidth="2" />
+              <text className="m-depot-d" x={q.x} y={q.y + 4} textAnchor="middle" fontSize="10" fontWeight="800">D</text>
+              <text className="m-ink" x={q.x + 14} y={q.y + 4} fontSize="11.5" fontWeight="600">{d.name}{active ? '' : ' (inactif)'}</text>
             </g>
           );
         })}
 
-        <g transform={`translate(${box.x + 16} ${box.y + box.h - 16})`}>
-          <line x1="0" y1="0" x2={S} y2="0" stroke="#0b1b3a" strokeWidth="2" />
-          <line x1="0" y1="-4" x2="0" y2="4" stroke="#0b1b3a" strokeWidth="2" />
-          <line x1={S} y1="-4" x2={S} y2="4" stroke="#0b1b3a" strokeWidth="2" />
-          <text x={S / 2} y="-7" textAnchor="middle" fontSize="11" fill="#0b1b3a">1 km</text>
+        <g className="m-scale" transform={`translate(${box.x + 16} ${box.y + box.h - 16})`}>
+          <line x1="0" y1="0" x2={S} y2="0" strokeWidth="2" />
+          <line x1="0" y1="-4" x2="0" y2="4" strokeWidth="2" />
+          <line x1={S} y1="-4" x2={S} y2="4" strokeWidth="2" />
+          <text className="m-ink" x={S / 2} y="-7" textAnchor="middle" fontSize="11">1 km</text>
         </g>
       </svg>
       {hover && (

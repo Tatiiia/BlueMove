@@ -7,3 +7,4 @@ data/generated/
 __pycache__/
 *.pyc
 .DS_Store
+dist-artifact/

@@ -1,8 +1,10 @@
+import { useState } from 'react';
 import { eur, localTime, n, pct } from './format';
 import { VARIANT_INFO } from './RunView';
 import { REJECT_REASONS, type DecisionRecord } from './store';
 
 export function History({ decisions, onClear }: { decisions: DecisionRecord[]; onClear: () => void }) {
+  const [armed, setArmed] = useState(false);
   const decided = decisions.filter((d) => d.decision !== 'expiree');
   const approved = decided.filter((d) => d.decision === 'approuvee').length;
   const followed = decided.filter((d) => d.decision === 'approuvee' && d.strategy === d.recommended).length;
@@ -20,7 +22,10 @@ export function History({ decisions, onClear }: { decisions: DecisionRecord[]; o
       </div>
       <div className="card">
         <div className="card-h"><h2>Journal des décisions</h2><span className="tag sim">simulateur</span><span className="spacer" />
-          {decisions.length > 0 && <button className="btn ghost small" onClick={() => { if (window.confirm('Effacer le journal local des décisions ?')) onClear(); }}>Effacer le journal</button>}
+          {decisions.length > 0 && !armed && <button className="btn ghost small" onClick={() => setArmed(true)}>Effacer le journal</button>}
+          {armed && <span className="row small"><span className="muted">Effacer les {decisions.length} décisions ?</span>
+            <button className="btn danger small" onClick={() => { onClear(); setArmed(false); }}>Effacer</button>
+            <button className="btn ghost small" onClick={() => setArmed(false)}>Annuler</button></span>}
         </div>
         {list.length === 0 ? <div className="empty">Aucune décision pour l'instant. Calculez une tournée puis approuvez ou rejetez-la.</div> : (
           <div className="table-wrap" style={{ maxHeight: 620 }}>

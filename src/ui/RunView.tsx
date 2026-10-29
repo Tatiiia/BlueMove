@@ -56,6 +56,7 @@ export function RunView({ cfg, meta, zones, depots, decision, onDecide, onBack, 
   const [reason, setReason] = useState('');
   const [comment, setComment] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [copied, setCopied] = useState<'ok' | 'fail' | null>(null);
   useEffect(() => { const t = setInterval(() => setNow(Date.now()), 10000); return () => clearInterval(t); }, []);
 
   const v = r.variants.find((x) => x.strategy === active)!;
@@ -87,6 +88,19 @@ export function RunView({ cfg, meta, zones, depots, decision, onDecide, onBack, 
   };
 
   const approvedVariant = decision?.decision === 'approuvee' && decision.strategy ? byStrat[decision.strategy] : null;
+  const sheetText = approvedVariant ? [
+    `BlueMove — feuille de route (DONNÉES SIMULÉES) · ${VARIANT_INFO[approvedVariant.strategy].name} · situation du ${localTime(r.as_of_utc)} · départ ${depot.name} · empreinte ${r.input_hash.slice(0, 12)}`,
+    ...approvedVariant.routes.filter((x) => x.stops.length).flatMap((route) => [
+      '', `Agent ${route.agent_index} — ${route.stops.length} échanges, retour ${clockAfter(startIso, route.duration_min)}`,
+      ...route.stops.map((st) => `${st.seq}. ${clockAfter(startIso, st.arrival_min)}  ${st.scooter_id}  batterie ${st.battery_id}  ${zoneName[st.zone_id]}  ${n(st.charge_pct, 1)} %  (${n(st.lat, 5)}, ${n(st.lng, 5)})`),
+    ]),
+    '', 'Vérifier l\'état du scooter avant l\'échange ; signaler tout défaut à la maintenance.',
+  ].join('\n') : '';
+  const copySheet = () => {
+    try {
+      navigator.clipboard.writeText(sheetText).then(() => setCopied('ok'), () => setCopied('fail'));
+    } catch { setCopied('fail'); }
+  };
   const k = v.kpis;
 
   return (
@@ -173,18 +187,23 @@ export function RunView({ cfg, meta, zones, depots, decision, onDecide, onBack, 
                   </div>
                   <button className="btn good" onClick={() => decide('approuvee')} disabled={(byStrat[approveChoice]?.kpis?.swaps ?? 0) === 0}>Approuver la tournée</button>
                   <div className="row" style={{ gap: 8 }}>
-                    <select aria-label="Motif de rejet" value={reason} onChange={(e) => setReason(e.target.value)} style={{ flex: 1, border: '1px solid var(--line)', borderRadius: 8, padding: '7px 9px' }}>
+                    <select id="reject-reason" aria-label="Motif de rejet" className="plain" value={reason} onChange={(e) => setReason(e.target.value)} style={{ flex: 1 }}>
                       <option value="">Motif de rejet…</option>
                       {Object.entries(REJECT_REASONS).map(([code, l]) => <option key={code} value={code}>{l}</option>)}
                     </select>
                     <button className="btn danger" onClick={() => decide('rejetee')}>Rejeter</button>
                   </div>
-                  <textarea aria-label="Commentaire" placeholder="Commentaire (facultatif)" rows={2} value={comment} onChange={(e) => setComment(e.target.value)} />
+                  <textarea id="reject-comment" aria-label="Commentaire" placeholder="Commentaire (facultatif)" rows={2} value={comment} onChange={(e) => setComment(e.target.value)} />
                   {error && <div className="notice err small">{error}</div>}
                   <p className="xs muted">L'application recommande ; vous décidez. Aucune commande n'est envoyée aux scooters ni aux agents.</p>
                 </>
               )}
-              {approvedVariant && <button className="btn" onClick={() => window.print()}>Imprimer la feuille de route</button>}
+              {approvedVariant && (
+                <div className="stack-sm">
+                  <button className="btn" onClick={copySheet}>{copied === 'ok' ? 'Feuille de route copiée' : 'Copier la feuille de route'}</button>
+                  {copied === 'fail' && <textarea aria-label="Feuille de route" readOnly rows={8} value={sheetText} onFocus={(e) => e.currentTarget.select()} autoFocus />}
+                </div>
+              )}
             </div>
           </div>
 
@@ -256,7 +275,7 @@ export function RunView({ cfg, meta, zones, depots, decision, onDecide, onBack, 
                   {r.variants.map((x, i) => (
                     <div key={x.strategy} className="cmp-bar">
                       <span className="xs">{VARIANT_INFO[x.strategy].name}</span>
-                      <div className="track"><div className="fill" style={{ width: `${((vals[i] ?? 0) / max) * 100}%`, background: x.strategy === 'REF' ? '#a7b1c2' : x.strategy === 'OPT_REGLE' ? 'var(--blue)' : 'var(--teal)' }} /></div>
+                      <div className="track"><div className="fill" style={{ width: `${((vals[i] ?? 0) / max) * 100}%`, background: x.strategy === 'REF' ? 'var(--excl)' : x.strategy === 'OPT_REGLE' ? 'var(--blue)' : 'var(--teal)' }} /></div>
                       <span className="xs num right">{x.kpis ? row.fmt(vals[i]) : '—'}</span>
                     </div>
                   ))}
@@ -313,23 +332,6 @@ export function RunView({ cfg, meta, zones, depots, decision, onDecide, onBack, 
         </div>
       </div>
 
-      {approvedVariant && (
-        <div className="print-sheet">
-          {approvedVariant.routes.filter((x) => x.stops.length).map((route) => (
-            <div key={route.agent_index} className="agent-page">
-              <h1>BlueMove — Feuille de route · Agent {route.agent_index}</h1>
-              <p>DONNÉES SIMULÉES — démonstration pédagogique. Variante : {VARIANT_INFO[approvedVariant.strategy].name}. Situation du {localTime(r.as_of_utc)}. Départ et retour : {depot.name}. Empreinte {r.input_hash.slice(0, 12)}.</p>
-              <table>
-                <thead><tr><th>#</th><th>Heure</th><th>Scooter</th><th>Batterie à retirer</th><th>Zone</th><th>Charge</th><th>Coordonnées</th></tr></thead>
-                <tbody>{route.stops.map((s) => (
-                  <tr key={s.scooter_id}><td>{s.seq}</td><td>{clockAfter(startIso, s.arrival_min)}</td><td>{s.scooter_id}</td><td>{s.battery_id}</td><td>{zoneName[s.zone_id]}</td><td>{n(s.charge_pct, 1)} %</td><td>{n(s.lat, 5)}, {n(s.lng, 5)}</td></tr>
-                ))}</tbody>
-              </table>
-              <p>Consigne : vérifier l'état du scooter avant l'échange ; signaler tout défaut à la maintenance. Retour prévu : {clockAfter(startIso, route.duration_min)}.</p>
-            </div>
-          ))}
-        </div>
-      )}
     </>
   );
 }

@@ -1,0 +1,27 @@
+// Fichier généré par scripts/gen-bundled.py — importe les scénarios simulés dans le build.
+import SC01 from '../../data/scenarios/SC01.json';
+import SC02 from '../../data/scenarios/SC02.json';
+import SC03 from '../../data/scenarios/SC03.json';
+import TC01 from '../../data/scenarios/TC01.json';
+import TC02 from '../../data/scenarios/TC02.json';
+import TC03 from '../../data/scenarios/TC03.json';
+import TC08 from '../../data/scenarios/TC08.json';
+import TC09 from '../../data/scenarios/TC09.json';
+import TC10 from '../../data/scenarios/TC10.json';
+import BM1606 from '../../data/benchmark/BM1606.json';
+import BM1611 from '../../data/benchmark/BM1611.json';
+import BM1616 from '../../data/benchmark/BM1616.json';
+import BM1706 from '../../data/benchmark/BM1706.json';
+import BM1711 from '../../data/benchmark/BM1711.json';
+import BM1716 from '../../data/benchmark/BM1716.json';
+import BM1806 from '../../data/benchmark/BM1806.json';
+import BM1811 from '../../data/benchmark/BM1811.json';
+import BM1816 from '../../data/benchmark/BM1816.json';
+import BM1906 from '../../data/benchmark/BM1906.json';
+import BM1911 from '../../data/benchmark/BM1911.json';
+import BM1916 from '../../data/benchmark/BM1916.json';
+import BM2006 from '../../data/benchmark/BM2006.json';
+import BM2011 from '../../data/benchmark/BM2011.json';
+import BM2016 from '../../data/benchmark/BM2016.json';
+export const SCENARIOS: Record<string, unknown> = { SC01, SC02, SC03, TC01, TC02, TC03, TC08, TC09, TC10 };
+export const BENCHMARK: Record<string, unknown> = { BM1606, BM1611, BM1616, BM1706, BM1711, BM1716, BM1806, BM1811, BM1816, BM1906, BM1911, BM1916, BM2006, BM2011, BM2016 };

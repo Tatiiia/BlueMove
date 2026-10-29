@@ -3,7 +3,7 @@ import type { Candidate, ValidatedScooter } from '../engine/types';
 import type { MapPoint } from './FleetMap';
 import { age, n } from './format';
 
-export const AGENT_COLORS = ['#1d5bff', '#0e9f8e', '#d6336c'];
+export const AGENT_COLORS = ['var(--a1)', 'var(--a2)', 'var(--a3)'];
 
 const RENTAL: Record<string, string> = { libre: 'libre', reserve: 'réservé', en_location: 'en location' };
 const OPS: Record<string, string> = { actif: 'actif', maintenance: 'en maintenance', hors_service: 'hors service' };

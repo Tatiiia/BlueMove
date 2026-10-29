@@ -85,6 +85,10 @@ Aucune donnée réelle de BlueMove, aucune donnée client, aucune géolocalisati
 - Le modèle ML ne bat la règle simple que de très peu, même sur simulation (D-27) : il reste un composant conditionnel.
 - K3 et K4 ne sont mesurables qu'au pilote ; K6 (coût par transfert) ne s'applique pas à un échange de batterie.
 
+## Version publiée dans Claude
+
+`npm run build:artifact` produit une page HTML autonome (code, styles et données intégrés, thèmes clair et sombre) publiable comme artefact Claude. Dans cette version, la feuille de route se copie au lieu de s'imprimer (l'impression est bloquée dans le cadre des artefacts).
+
 ## Déploiement sur Vercel
 
 Le projet est un site statique ; aucune variable d'environnement n'est requise.

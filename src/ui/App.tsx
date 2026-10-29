@@ -72,7 +72,7 @@ export function App() {
         <div className="topbar-inner">
           <a className="brand" href="#operations" title="Logotype provisoire (pas le logo officiel)">
             <span className="brand-mark" aria-hidden>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z" fill="#fff" /></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z" className="brand-bolt" /></svg>
             </span>
             <span className="brand-word"><span className="b">blue</span><span className="m">move</span></span>
             <span className="brand-sub">Recharge<br />Planner</span>
@@ -85,7 +85,7 @@ export function App() {
           </nav>
           <span className="spacer" />
           <div className="scenario-select">
-            <label htmlFor="sc" className="xs" style={{ color: '#9fb0d0' }}>Situation</label>
+            <label htmlFor="sc" className="xs topbar-muted">Situation</label>
             <select id="sc" value={scenarioId} onChange={(e) => setScenarioId(e.target.value)}>
               <optgroup label="Scénarios">{nominal.map((e) => <option key={e.id} value={e.id}>{e.label}</option>)}</optgroup>
               <optgroup label="Cas de test">{tests.map((e) => <option key={e.id} value={e.id}>{e.label}</option>)}</optgroup>

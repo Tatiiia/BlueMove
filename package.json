@@ -12,8 +12,9 @@
     "test": "tsx --test tests/*.test.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "typecheck:engine": "tsc -p tsconfig.engine.json --noEmit",
-    "data": "python3 sim/generate.py && python3 ml/train_depletion.py",
-    "benchmark": "tsx scripts/benchmark.ts"
+    "data": "python3 sim/generate.py && python3 ml/train_depletion.py && python3 scripts/gen-bundled.py",
+    "benchmark": "tsx scripts/benchmark.ts",
+    "build:artifact": "node build-artifact.mjs"
   },
   "dependencies": {
     "react": "19.2.8",
